@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 from flask import Flask,request
 from telebot import TeleBot
+from commandParser import *
 import requests
 import pickledb
 import commandHandler
@@ -24,7 +25,7 @@ def telegramwebhookhandler():
 		chat_id = incoming['message']['chat']['id']
 		msg =incoming['message']['text']
 		user_id=incoming['message']['from']['id']
-
+		commandContent=commandParser(msg)
 
 		return '{"status":"ok"}'
 @app.route('/bot/worktileoatuh')
