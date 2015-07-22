@@ -1,3 +1,4 @@
+# encoding: UTF-8
 from flask import Flask,request
 from telebot import TeleBot
 import requests
@@ -7,6 +8,11 @@ global token
 token="96054818:AAFiPFHafymEzsJx67ftJ0XFKe5pwlRKF3E"
 app = Flask(__name__)
 bot=TeleBot(token=token)
+
+db=pickledb.load("worktilebot.db",False)
+db.set("author","BroncoTc/豆腐干")
+db.dump()
+
 
 @app.before_first_request
 def setwebhook():
@@ -18,11 +24,14 @@ def telegramwebhookhandler():
 		incoming=request.get_json()
 		chat_id = incoming[u'message'][u'chat'][u'id']
 		msg =incoming[u'message'][u'text']
-		bot.send_message(chat_id=chat_id,text=msg)
+
 		return '{"status":"ok"}'
-	else:
-		return '{"status":"ok"}'
+
+@app.route('/bot/worktileoatuh')
+def oauthHandler():
+	pass
+
 
 if __name__ == '__main__':
 	sslcontext = ('all.crt', 'all.key')
-	app.run(host="broncotc.com",port=8443,ssl_context=sslcontext)
+	app.run(host="0.0.0.0",port=8443,ssl_context=sslcontext)
