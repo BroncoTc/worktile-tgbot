@@ -1,18 +1,16 @@
 # encoding: UTF-8
+from __future__ import unicode_literals
 from flask import Flask,request
 from telebot import TeleBot
 import requests
 import pickledb
+import commandHandler
 
 global token
 token="96054818:AAFiPFHafymEzsJx67ftJ0XFKe5pwlRKF3E"
 app = Flask(__name__)
 bot=TeleBot(token=token)
-
-db=pickledb.load("worktilebot.db",False)
-db.set("author","BroncoTc/豆腐干")
-db.dump()
-
+db=pickledb.load("./worktilebot.db",False)
 
 @app.before_first_request
 def setwebhook():
@@ -22,11 +20,13 @@ def setwebhook():
 def telegramwebhookhandler():
 	if request.method=="POST":
 		incoming=request.get_json()
-		chat_id = incoming[u'message'][u'chat'][u'id']
-		msg =incoming[u'message'][u'text']
+		print incoming
+		chat_id = incoming['message']['chat']['id']
+		msg =incoming['message']['text']
+		user_id=incoming['message']['from']['id']
+
 
 		return '{"status":"ok"}'
-
 @app.route('/bot/worktileoatuh')
 def oauthHandler():
 	pass
