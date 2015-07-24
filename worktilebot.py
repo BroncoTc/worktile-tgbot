@@ -1,7 +1,6 @@
 # encoding: UTF-8
 from __future__ import unicode_literals
 from flask import Flask,request
-from telebot import TeleBot
 from commandParser import *
 import requests
 import pickledb
@@ -9,9 +8,8 @@ import commandHandler
 import apiCommander
 
 global token
-token="96054818:AAFiPFHafymEzsJx67ftJ0XFKe5pwlRKF3E"
 app = Flask(__name__)
-bot=TeleBot(token=token)
+
 db=pickledb.load("worktilebot.db",True)
 
 @app.before_first_request
