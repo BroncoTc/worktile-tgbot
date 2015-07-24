@@ -1,8 +1,11 @@
 __author__ = 'broncotc'
+
+
 def commandParser(command):
-	temp = command.replace("@worktile_bot","")
+	temp = command.replace("@worktile_bot", "")
 	print temp
 	return temp
+
 
 def Central_txt(start_str, end, html):
 	start = html.find(start_str)
