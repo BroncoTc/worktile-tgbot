@@ -17,10 +17,10 @@ def MessageParser(code):
 	elif temp == "text":
 		pass
 def Central_txt(start_str, end, html):
-    start = html.find(start_str)
-    if start >= 0:
-        start += len(start_str)
-        end = html.find(end, start)
-        if end >= 0:
-            return html[start:end].strip()
+	start = html.find(start_str)
+	if start >= 0:
+		start += len(start_str)
+		end = html.find(end, start)
+		if end >= 0:
+			return html[start:end].strip()
 MessageParser(" /bot /title textmessagebox")

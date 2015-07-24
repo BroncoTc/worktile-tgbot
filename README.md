@@ -1,2 +1,4 @@
 #Worktile-TgBot
-###This is a Telegram bot helps teams to collaborate better with funcitons of Worktile adding to Telegram###
+使用WorktileAPI制作的TelegramBot，主要服务于使用Telegram作为团队协作中即时通信平台的开发团队。使用此bot可以方便地使用聊天面板对Worktile服务进行操作。
+当前Telegram官网(包括web端)可能被墙，本身通信服务一切正常，建议使用移动/桌面客户端访问服务。
+请在各大手机助手下载Android平台App，或在iOS平台使用AppStore下载。下载后可访问[@Worktile_bot](https://telegram.me/Wortile_bot)使用此bot。电脑端使用支持WebSocket的代理（如ShadowSocks，VPN）可以直接点击此链接打开桌面客户端或跳转Telegram的WebApp使用此bot。

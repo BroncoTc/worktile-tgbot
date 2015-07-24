@@ -12,14 +12,14 @@ global token
 token="96054818:AAFiPFHafymEzsJx67ftJ0XFKe5pwlRKF3E"
 app = Flask(__name__)
 bot=TeleBot(token=token)
-db=pickledb.load("./worktilebot.db",False)
+db=pickledb.load("worktilebot.db",True)
 
 @app.before_first_request
-def setwebhook():
+def setWebhook():
 	requests.get("https://api.telegram.org/bot"+token+"/setWebhook?url=https://broncotc.com:8443/bot/webhook"+token)
 
 @app.route('/bot/webhook'+token,methods=["POST"])
-def telegramwebhookhandler():
+def telegramWebhookHandler():
 	if request.method=="POST":
 		incoming=request.get_json()
 		print incoming
@@ -27,11 +27,15 @@ def telegramwebhookhandler():
 		msg =incoming['message']['text']
 		user_id=incoming['message']['from']['id']
 		commandContent=commandParser(msg)
-
+		apiCommander.commandRouter(commandContent,user_id,chat_id)
 		return '{"status":"ok"}'
-@app.route('/bot/worktileoatuh')
+@app.route('/bot/worktileOauth')
 def oauthHandler():
-	pass
+	print request.get_data()
+	print request.get_json()
+	print request.data
+	print request.json
+	return '{"status":"ok"}'
 
 
 if __name__ == '__main__':

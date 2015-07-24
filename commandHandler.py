@@ -75,8 +75,6 @@ class worktileEntryAPI():
 		if "error_code" in t.text:
 			return "error"
 		else:
-<<<<<<< Updated upstream
-=======
 			return t.text
 	def WatchTask(self,entry_id,pid,token):
 		t = requests.post("https://api.worktile.com/v1/entries/"+entry_id+"/watcher?pid="+pid+"&access_token="+token)
@@ -145,5 +143,4 @@ class worktileTaskAPI():
 		if "error_code" in t.text:
 			return "error"
 		else:
->>>>>>> Stashed changes
 			return t.text
