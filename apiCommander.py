@@ -20,6 +20,7 @@ def oauthProcessor(user_id,forceReOauth=False):
 
 def commandRouter(msg,user_id,chat_id):
 	if msg=="/start":
+		print 1
 		oauthAddress=oauthProcessor(user_id,forceReOauth=True)[1]
 		bot.send_message(chat_id,"你需要先授权（重新授权）本bot访问你的Worktile账户，点击此链接进行授权\n"+oauthAddress)
 	return 0

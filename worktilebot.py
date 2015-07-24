@@ -6,10 +6,9 @@ import requests
 import pickledb
 import commandHandler
 import apiCommander
-
 global token
+token="96054818:AAFiPFHafymEzsJx67ftJ0XFKe5pwlRKF3E"
 app = Flask(__name__)
-
 db=pickledb.load("worktilebot.db",True)
 
 @app.before_first_request
@@ -29,12 +28,10 @@ def telegramWebhookHandler():
 		return '{"status":"ok"}'
 @app.route('/bot/worktileOauth')
 def oauthHandler():
-	print request.get_data()
-	print request.get_json()
-	print request.data
-	print request.json
-	return '{"status":"ok"}'
-
+	user_id=request.args["state"]
+	oauthToken=request.args["code"]
+	db.set(str(user_id)+"_worktileToken",oauthToken)
+	return '<h3>您已成功授权此Bot访问您的Worktile账户</h3>'
 
 if __name__ == '__main__':
 	sslcontext = ('all.crt', 'all.key')
