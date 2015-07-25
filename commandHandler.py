@@ -113,7 +113,7 @@ class worktileEntryAPI():
 
 
 class worktileTaskAPI():
-	def getTaskList(self, token, pid, type):
+	def getList(self, token, pid, type):
 		data = {
 			"access_token": token,
 			"pid": pid,
@@ -132,7 +132,7 @@ class worktileTaskAPI():
 		else:
 			return t.text
 
-	def createNewTask(self, pid, token, name, entry_id):
+	def createTask(self, pid, token, name, entry_id):
 		data = {
 			"name": name,
 			"entry_id": entry_id
@@ -143,14 +143,14 @@ class worktileTaskAPI():
 		else:
 			return t.text
 
-	def taskDet(self, pid, token, tid):
+	def taskDetail(self, pid, token, tid):
 		t = requests.get("https://api.worktile.com/v1/tasks/" + tid + "?access_token=" + token + "&pid=" + pid)
 		if "error_code" in t.text:
 			raise ValueError
 		else:
 			return t.text
 
-	def reTask(self, tid, pid, token, name, desc):
+	def editTask(self, tid, pid, token, name, desc):
 		data = {
 			"name": name,
 			"desc": desc
@@ -161,7 +161,7 @@ class worktileTaskAPI():
 		else:
 			return t.text
 
-	def delTask(self, tid, pid, token):
+	def deleteTask(self, tid, pid, token):
 		t = requests.delete("https://api.worktile.com/v1/tasks/" + tid + "?pid=" + pid + "&access_token=" + token)
 		if "error_code" in t.text:
 			raise ValueError
