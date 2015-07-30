@@ -3,7 +3,6 @@ __author__ = 'broncotc'
 
 def commandParser(command):
 	temp = command.replace("@worktile_bot", "")
-	print temp
 	return temp
 
 

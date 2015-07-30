@@ -12,10 +12,10 @@ db = pickledb.load("./worktilebot.db", True)
 tempDb=pickledb.load("./tempdata.db",False)
 
 def oauthProcessor(user_id, forceReOauth=False):
-	userWorktileToken = db.get(str(user_id) + "_worktileToken")
+	userWorktileToken = db.get(str(user_id) + "_worktileAccessToken")
 	if userWorktileToken == None or forceReOauth:
 		requestData = {"client_id": appKey,
-					   "redirect_uri": "https://broncotc.com:8443/bot/worktileOauth",
+					   "redirect_uri": "https://broncotc.com:8443/bot/worktileAuthorizeOauth",
 					   "state": str(user_id)}
 		oauthUrl = requests.get("https://open.worktile.com/oauth2/authorize", params=requestData).url
 		return [None, oauthUrl]
@@ -29,7 +29,11 @@ def commandRouter(msg, user_id, chat_id,worktileToken):
 		bot.send_message(chat_id, "你需要先授权（重新授权）本bot访问你的Worktile账户，点击此链接进行授权\n" + oauthAddress,disable_web_page_preview=True)
 	elif msg == "/projects":
 		project=commandHandler.worktileProjectAPI()
-		projectList=project.getUserAllProject(token=worktileToken)
+		try:
+			print worktileToken
+			projectList=project.getUserAllProject(token=worktileToken)
+		except ValueError:
+			print "apierror"
 		print projectList
 	elif msg == "":
 		pass

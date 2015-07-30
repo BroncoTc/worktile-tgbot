@@ -15,6 +15,8 @@ class worktileUserAPI():
 class worktileProjectAPI():
 	def getUserAllProject(self, token):
 		t = requests.get("https://api.worktile.com/v1/projects", headers={"access_token": token})
+		print t
+		print t.text
 		if 'error_code' in t.text:
 			raise ValueError
 		else:
@@ -61,7 +63,7 @@ class worktileEntryAPI():
 			"pid": pid,
 			"access_token": token
 		}
-		t = requests.get("https://api.worktile.com/v1/entries", data)
+		t = requests.get("https://api.worktile.com/v1/entries", data=data)
 		if "error_code" in t.text:
 			raise ValueError
 		else:
