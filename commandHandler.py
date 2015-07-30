@@ -14,13 +14,10 @@ class worktileUserAPI():
 
 class worktileProjectAPI():
 	def getUserAllProject(self, token):
-<<<<<<< HEAD
 		t = requests.get("https://api.worktile.com/v1/projects", headers={"access_token": token})
 		print t
 		print t.text
-=======
 		t = requests.get("https://api.worktile.com/v1/projects", parmas={"access_token": token})
->>>>>>> is this?
 		if 'error_code' in t.text:
 			raise ValueError
 		else:
