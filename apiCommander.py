@@ -17,7 +17,7 @@ def oauthProcessor(user_id, forceReOauth=False):
 	userWorktileToken = db.get(str(user_id) + "_worktileAccessToken")
 	if userWorktileToken == None or forceReOauth:
 		requestData = {"client_id": appKey,
-					   "redirect_uri": "https://test.broncotc.com:8443/bot/worktileAuthorizeOauth",
+					   "redirect_uri": "https://sf.broncotc.com:8443/bot/worktileAuthorizeOauth",
 					   "state": str(user_id)}
 		oauthUrl = requests.get("https://open.worktile.com/oauth2/authorize", params=requestData).url
 		return [None, oauthUrl]
