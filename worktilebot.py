@@ -1,6 +1,6 @@
 # encoding: UTF-8
 from __future__ import unicode_literals
-from flask import Flask, request
+from flask import Flask, request,templating
 from commandParser import *
 import requests
 import pickledb
@@ -14,12 +14,7 @@ app = Flask(__name__)
 db = pickledb.load("worktilebot.db", True)
 bot = TeleBot(token=token)
 appKey = "0ae48b66b7564a9fb2011138ed02fa21"
-
-
-@app.before_first_request
-def setWebhook():
-	requests.get(
-		"https://api.telegram.org/bot" + token + "/setWebhook?url=https://sf.broncotc.com:8443/bot/webhook" + token)
+requests.get("https://api.telegram.org/bot" + token + "/setWebhook?url=https://broncotc.com:8443/bot/webhook" + token)
 
 
 @app.route('/bot/webhook' + token, methods=["POST"])
@@ -30,8 +25,8 @@ def telegramWebhookHandler():
 		msg = incoming['message']['text']
 		user_id = incoming['message']['from']['id']
 		commandContent = commandParser(msg)
-		if (db.get(str(user_id) + "_worktileToken") != None) or (commandContent == "/start"):
-			apiCommander.commandRouter(commandContent, user_id, chat_id, db.get(str(user_id) + "_worktileToken"))
+		if (db.get(str(user_id) + "_worktileAccessToken") != None) or (commandContent == "/start"):
+			apiCommander.commandRouter(commandContent, user_id, chat_id, db.get(str(user_id) + "_worktileAccessToken"))
 		else:
 			bot.send_message(chat_id, "请先私聊本bot以给予本bot访问你Worktile账户的权限")
 		return '{"status":"ok"}'
@@ -43,8 +38,8 @@ def oauthAuthorizeHandler():
 	oauthAuthorizeCode = request.args["code"]
 	data = {"client_id": appKey, "code": oauthAuthorizeCode}
 	oauthAccessTokenFeedback = requests.post("https://api.worktile.com/oauth2/access_token", data).text
-	oauthAccessToken = json.loads((oauthAccessTokenFeedback))["access_token"]
-	oauthRefreshToken = json.loads((oauthAccessTokenFeedback))["refresh_token"]
+	oauthAccessToken = json.loads(oauthAccessTokenFeedback)["access_token"]
+	oauthRefreshToken = json.loads(oauthAccessTokenFeedback)["refresh_token"]
 	db.set(str(user_id) + "_worktileAccessToken", oauthAccessToken)
 	db.set(str(user_id) + "_worktileRefreshToken", oauthRefreshToken)
 	return '{"status":"ok"}'
