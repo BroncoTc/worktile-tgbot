@@ -14,24 +14,21 @@ class worktileUserAPI():
 
 class worktileProjectAPI():
 	def getUserAllProject(self, token):
-		t = requests.get("https://api.worktile.com/v1/projects", headers={"access_token": token})
-		print t
-		print t.text
-		t = requests.get("https://api.worktile.com/v1/projects", parmas={"access_token": token})
+		t = requests.get("https://api.worktile.com/v1/projects", params={"access_token": token})
 		if 'error_code' in t.text:
 			raise ValueError
 		else:
 			return json.dump(t.text)
 
 	def getProjectDetail(self, pid, token):
-		t = requests.get("https://api.worktile.com/v1/projects/" + pid, headers={"access_token": token})
+		t = requests.get("https://api.worktile.com/v1/projects/" + pid, params={"access_token": token})
 		if "error_code" in t.text:
 			raise ValueError
 		else:
 			return json.dumps(t.text)
 
 	def getProjectMember(self, pid, token):
-		t = requests.get("https://api.worktile.com/v1/projects/" + pid + "/members", headers={"access_token": token})
+		t = requests.get("https://api.worktile.com/v1/projects/" + pid + "/members", params={"access_token": token})
 		if "error_code" in t.text:
 			raise ValueError
 		else:
@@ -49,7 +46,7 @@ class worktileProjectAPI():
 		else:
 			return json.dumps(t.text)
 
-	def delpRrojectMember(self, pid, uid, token):
+	def delProjectMember(self, pid, uid, token):
 		t = requests.delete("https://api.worktile.com/v1/projects/" + pid + "/members/" + uid,
 							headers={"access_token": token})
 		if "error_code" in t.text:
@@ -64,7 +61,7 @@ class worktileEntryAPI():
 			"pid": pid,
 			"access_token": token
 		}
-		t = requests.get("https://api.worktile.com/v1/entries", data=data)
+		t = requests.get("https://api.worktile.com/v1/entries", params=data)
 		if "error_code" in t.text:
 			raise ValueError
 		else:
@@ -122,7 +119,7 @@ class worktileTaskAPI():
 			"pid": pid,
 			"type": type
 		}
-		t = requests.get("https://api.worktile.com/v1/tasks", data=data)
+		t = requests.get("https://api.worktile.com/v1/tasks", params=data)
 		if "error_code" in t.text:
 			raise ValueError
 		else:
@@ -170,3 +167,16 @@ class worktileTaskAPI():
 			raise ValueError
 		else:
 			return json.dumps(t.text)
+	def movTask(self,tid,pid,token,to_pid,to_entry_id):
+		t = requests.put("https://api.worktile.com/v1/tasks/"+tid+"/move",params={"pid":pid,"access_token":token},data ={"to_pid":to_pid,"to_entry_id":to_entry_id})
+		if "error_code" in t.text:
+			raise ValueError
+		else:
+			return json.dumps(t.text)
+	def setEnpiryDate(self,tid,pid,token,expire):
+		t = requests.put("https://api.worktile.com/v1/tasks/"+tid+"/expire",params = {"pid":pid,"access_token":token},data={"expire":expire})
+		if "error_code" in t.text:
+			raise ValueError
+		else:
+			return json.dumps(t.text)
+	def allotTask(self,tid,pid,token,uid):
