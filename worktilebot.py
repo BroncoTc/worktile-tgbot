@@ -16,7 +16,7 @@ appKey="0ae48b66b7564a9fb2011138ed02fa21"
 @app.before_first_request
 def setWebhook():
 	requests.get(
-		"https://api.telegram.org/bot" + token + "/setWebhook?url=https://broncotc.com:8443/bot/webhook" + token)
+		"https://api.telegram.org/bot" + token + "/setWebhook?url=https://home.broncotc.com:8443/bot/webhook" + token)
 
 
 @app.route('/bot/webhook' + token, methods=["POST"])
