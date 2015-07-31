@@ -37,7 +37,7 @@ def commandRouter(msg, user_id, chat_id, worktileToken):
 			markup=types.ReplyKeyboardMarkup()
 			for projectInfo in projectList:
 				markup.add(projectInfo["name"])
-			bot.send_message(chat_id,"Choose the project you want to view or edit from the list",reply_markup=types.ReplyKeyboardHide)
+			bot.send_message(chat_id,"Choose the project you want to view or edit from the list",reply_markup=markup)
 		except ValueError:
 			print "apierror"
 	elif msg == "/cancel":
