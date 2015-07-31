@@ -1,10 +1,12 @@
 # encoding: UTF-8
-__author__ = 'bakabie'
+__author__ = ['bakabie',"BroncoTc"]
 import requests
 import json
 
 
 class worktileUser():
+	def	__init__(self,token):
+		self.token=token
 	def GetUserInfo(self, token):
 		t = requests.get("https://api.worktile.com/v1/user/profile", params={"access_token": token})
 		if 'error_code' in t.text:
@@ -15,6 +17,12 @@ class worktileUser():
 	def getUserAllProject(self):
 		t = requests.get("https://api.worktile.com/v1/projects", params={"access_token": self.token})
 		if 'error_code' in t.text:
+			raise ValueError
+		else:
+			return json.loads(t.text)
+	def willOverTask(self):
+		t = requests.get("https://api.worktile.com/v1/tasks/today", params={"access_token": self.token})
+		if "error_code" in t.text:
 			raise ValueError
 		else:
 			return json.loads(t.text)
@@ -60,7 +68,7 @@ class worktileProject():
 		else:
 			return json.loads(t.text)
 
-	def getEntryTask(self, pid):
+	def getEntryList(self, pid):
 		data = {
 			"pid": pid,
 			"access_token": self.token
@@ -70,12 +78,17 @@ class worktileProject():
 			raise ValueError
 		else:
 			return json.loads(t.text)
-
-
-class worktileEntry(worktileProject):
-	def __init__(self, entry_id):
-		self.entry_id = entry_id
-
+	def getTaskList(self, type):
+		data = {
+			"access_token": self.token,
+			"pid": self.pid,
+			"type": type
+		}
+		t = requests.get("https://api.worktile.com/v1/tasks", params=data)
+		if "error_code" in t.text:
+			raise ValueError
+		else:
+			return json.loads(t.text)
 	def createEntry(self, name):
 		data = {
 			"name": name
@@ -86,6 +99,10 @@ class worktileEntry(worktileProject):
 			raise ValueError
 		else:
 			return json.loads(t.text)
+
+class worktileEntry(worktileProject):
+	def __init__(self, entry_id):
+		self.entry_id = entry_id
 
 	def renameEntry(self, name):
 		data = {
@@ -98,7 +115,7 @@ class worktileEntry(worktileProject):
 		else:
 			return json.loads(t.text)
 
-	def watchEntryTask(self):
+	def watchEntry(self):
 		t = requests.post(
 			"https://api.worktile.com/v1/entries/" + self.entry_id + "/watcher",
 			params={"pid": self.pid, "access_token": self.token})
@@ -107,7 +124,7 @@ class worktileEntry(worktileProject):
 		else:
 			return json.loads(t.text)
 
-	def delEntryTask(self):
+	def deleteEntry(self):
 		t = requests.delete(
 			"https://api.worktile.com/v1/entries/" + self.entry_id,
 			params={"pid": self.pid, "access_token": self.token})
@@ -116,7 +133,7 @@ class worktileEntry(worktileProject):
 		else:
 			return json.loads(t.text)
 
-	def reWatchEntryTask(self):
+	def stopWatchEntry(self):
 		t = requests.delete(
 			"https://api.worktile.com/v1/entries/" + self.entry_id + "/watcher",
 			params={"pid": self.pid, "access_token": self.token})
@@ -124,30 +141,22 @@ class worktileEntry(worktileProject):
 			raise ValueError
 		else:
 			return json.loads(t.text)
+	def archiveEntry(self):
+		t = requests.put("https://api.worktile.com/v1/tasks/archive",
+						 params={"pid": self.pid, "access_token": self.token}, data={"entry_id": self.entry_id})
+		if "error_code" in t.text:
+			raise ValueError
+		else:
+			return json.loads(t.text)
 
 
-class worktileTaskAPI(worktileEntry):
+class worktileTask(worktileEntry):
 	def __init__(self, tid):
 		self.tid = tid
 
-	def getTaskList(self, type):
-		data = {
-			"access_token": self.token,
-			"pid": self.pid,
-			"type": type
-		}
-		t = requests.get("https://api.worktile.com/v1/tasks", params=data)
-		if "error_code" in t.text:
-			raise ValueError
-		else:
-			return json.loads(t.text)
 
-	def willOverTask(self):
-		t = requests.get("https://api.worktile.com/v1/tasks/today", params={"access_token": self.token})
-		if "error_code" in t.text:
-			raise ValueError
-		else:
-			return json.loads(t.text)
+
+
 
 	def createTask(self, name):
 		data = {
@@ -232,7 +241,7 @@ class worktileTaskAPI(worktileEntry):
 		else:
 			return json.loads(t.text)
 
-	def reWatchTask(self, uid):
+	def stopWatchTask(self, uid):
 		t = requests.delete("https://api.worktile.com/v1/tasks/" + self.tid + "/watchers/" + uid,
 							params={"pid": self.pid, "access_token": self.token})
 		if "error_code" in t.text:
@@ -280,7 +289,7 @@ class worktileTaskAPI(worktileEntry):
 		else:
 			return json.loads(t.text)
 
-	def editTDo(self, todo_id, name):
+	def editToDo(self, todo_id, name):
 		t = requests.put("https://api.worktile.com/v1/tasks/" + self.tid + "/todos/" + todo_id,
 						 params={"pid": self.pid, "access_token": self.token}, data={"name": name})
 		if "error_code" in t.text:
@@ -304,7 +313,7 @@ class worktileTaskAPI(worktileEntry):
 		else:
 			return json.loads(t.text)
 
-	def delToDo(self, todo_id):
+	def deleteToDo(self, todo_id):
 		t = requests.delete("https://api.worktile.com/v1/tasks/" + self.tid + "/todos/" + todo_id,
 							params={"pid": self.pid, "access_token": self.token})
 		if "error_code" in t.text:
@@ -320,13 +329,7 @@ class worktileTaskAPI(worktileEntry):
 		else:
 			return json.loads(t.text)
 
-	def archiveEntryTask(self):
-		t = requests.put("https://api.worktile.com/v1/tasks/archive",
-						 params={"pid": self.pid, "access_token": self.token}, data={"entry_id": self.entry_id})
-		if "error_code" in t.text:
-			raise ValueError
-		else:
-			return json.loads(t.text)
+
 
 	def archiveTask(self):
 		t = requests.put("https://api.worktile.com/v1/tasks/" + self.tid + "/archive",

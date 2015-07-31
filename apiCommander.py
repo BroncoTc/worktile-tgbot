@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 import pickledb
 import requests
 import commandHandler
-from telebot import TeleBot
+from telebot import TeleBot,types
 
 __author__ = 'BroncoTc'
 
@@ -31,12 +31,15 @@ def commandRouter(msg, user_id, chat_id, worktileToken):
 		bot.send_message(chat_id, "你需要先授权（重新授权）本bot访问你的Worktile账户，点击此链接进行授权\n" + oauthAddress,
 						 disable_web_page_preview=True)
 	elif msg == "/projects":
-		project = commandHandler.worktileProjectAPI()
+		user=commandHandler.worktileUser(worktileToken)
 		try:
-			projectList = project.getUserAllProject(token=worktileToken)
-
+			projectList = user.getUserAllProject()
+			markup=types.ReplyKeyboardMarkup()
+			for projectInfo in projectList:
+				markup.add(projectInfo["name"])
+			bot.send_message(chat_id,"Choose the project you want to view or edit from the list",reply_markup=types.ReplyKeyboardHide)
 		except ValueError:
 			print "apierror"
 	elif msg == "/cancel":
-		pass
+		bot.send_message(chat_id,"Current session canceled successfully!",reply_markup=types.ReplyKeyboardHide)
 	return 0
