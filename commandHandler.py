@@ -6,6 +6,7 @@ import json
 
 class worktileUserAPI():
 	def GetUserInfo(self, token):
+
 		t = requests.get("https://api.worktile.com/v1/user/profile", params={"access_token": token})
 		if 'error_code' in t.text:
 			raise ValueError
@@ -180,3 +181,126 @@ class worktileTaskAPI():
 		else:
 			return json.dumps(t.text)
 	def allotTask(self,tid,pid,token,uid):
+		t = requests.post("https://api.worktile.com/v1/tasks/"+tid+"/member",params = {"pid":pid,"access_token":token},data={"uid":uid})
+		if "error_code" in t.text:
+			raise ValueError
+		else:
+			return json.dumps(t.text)
+	def reAllotTask(self,tid,member_id,pid):
+		t = requests.delete("https://api.worktile.com/v1/tasks/"+tid+"/members/"+member_id,params = {"pid":pid,"access_token":token})
+		if "error_code" in t.text:
+			raise ValueError
+		else:
+			return json.dumps(t.text)
+	def addWatchTask(self,tid,pid,token,uids):
+		t = requests.post("https://api.worktile.com/v1/tasks/"+tid+"/watcher",params = {"pid":pid,"access_token":token},data={"uids":uids})
+		#this uids is a task:
+		# curl -d 'uids=['abcea', 'abcd']' 'https://api.worktile.com/v1/tasks/adsa7sa6/watcher?pid=xxx&access_token=xxx'
+		if "error_code" in t.text:
+			raise ValueError
+		else:
+			return json.dumps(t.text)
+	def reWatchTask(self,tid,uid,pid,token):
+		t = requests.delete("https://api.worktile.com/v1/tasks/"+tid+"/watchers/"+uid,params={"pid":pid,"access_token":token})
+		if "error_code" in t.text:
+			raise ValueError
+		else:
+			return json.dumps(t.text)
+	def setLabels(self,tip,pid,token,label):
+		t = requests.put("https://api.worktile.com/v1/tasks/"+tid+"labels",params={"pid":pid,"access_token":token},data={"label":label})
+		if "error_code" in t.text:
+			raise ValueError
+		else:
+			return json.dumps(t.text)
+	def deleteLabels(self,tid,pid,label,token):
+		t = requests.delete("https://api.worktile.com/v1/tasks/"+tid+"/labels",params={"pid":pid,"label":label,"access_token":token})
+		if "error_code" in t.text:
+			raise ValueError
+		else:
+			return json.dumps(t.text)
+	def completeTask(self,tid,pid,token):
+		t = requests.put("https://api.worktile.com/v1/tasks/"+tid+"/complete",params={"pid":pid,"access_token":token})
+		if "error_code" in t.text:
+			raise ValueError
+		else:
+			return json.dumps(t.text)
+	def unCompleteTask(self,tid,pid,token):
+		t = requests.put("https://api.worktile.com/v1/tasks/"+tid+"/uncomplete",params={"pid":pid,"access_token":token})
+		if "error_code" in t.text:
+			raise ValueError
+		else:
+			return json.dumps(t.text)
+	def addToDo(self,tid,pid,token,name):
+		t = requests.post("https://api.worktile.com/v1/tasks/"+tid+"/todo",params={"pid":pid,"access_token":token},data={"name":name})
+		if "error_code" in t.text:
+			raise ValueError
+		else:
+			return json.dumps(t.text)
+	def editTDo(self,tid,todo_id,pid,token,name):
+		t = requests.put("https://api.worktile.com/v1/tasks/"+tid+"/todos/"+todo_id,params={"pid":pid,"access_token":token},data={"name":name})
+		if "error_code" in t.text:
+			raise ValueError
+		else:
+			return json.dumps(t.text)
+	def completeToDo(self,tid,todo_id,pid,token):
+		t = requests.put("https://api.worktile.com/v1/tasks/"+tid+"/todos/"+todo_id+"/checked",params={"pid":pid,"access_token":token})
+		if "error_code" in t.text:
+			raise ValueError
+		else:
+			return json.dumps(t.text)
+	def unCompleteToDo(self,tid,todo_id,pid,token):
+		t = requests.put("https://api.worktile.com/v1/tasks/"+tid+"/todos/"+todo_id+"/unchecked",params={"pid":pid,"access_token":token})
+		if "error_code" in t.text:
+			raise ValueError
+		else:
+			return json.dumps(t.text)
+	def delToDo(self,tid,todo_id,pid,token):
+		t = requests.delete("https://api.worktile.com/v1/tasks/"+tid+"/todos/"+todo_id,params={"pid":pid,"access_token":token})
+		if "error_code" in t.text:
+			raise ValueError
+		else:
+			return json.dumps(t.text)
+	def getTaskArchived(self,pid,page,size,token):
+		t = requests.get("https://api.worktile.com/v1/tasks/archived",params={"pid":pid,"page":page,"size":size,"access_token":token})
+		if "error_code" in t.text:
+			raise ValueError
+		else:
+			return json.dumps(t.text)
+	def archiveEntryTask(self,pid,token,entry_id):
+		t = requests.put("https://api.worktile.com/v1/tasks/archive",params={"pid":pid,"access_token":token},data={"entry_id":entry_id})
+		if "error_code" in t.text:
+			raise ValueError
+		else:
+			return json.dumps(t.text)
+	def archiveTask(self,tid,pid,token):
+		t = requests.put("https://api.worktile.com/v1/tasks/"+tid+"/archive",params={"pid":pid,"access_token":token})
+		if "error_code" in t.text:
+			raise ValueError
+		else:
+			return json.dumps(t.text)
+	def unArchiveTask(self,tid,pid,entry_id,token):
+		t = requests.put("https://api.worktile.com/v1/tasks/"+tid+"/unarchive",params={"pid":pid,"access_token":token},data={"entry_id":entry_id})
+		if "error_code" in t.text:
+			raise ValueError
+		else:
+			return json.dumps(t.text)
+	def getComments(self,tid,token,pid):
+		t = requests.get("https://api.worktile.com/v1/tasks/"+tid+"/comments",params={"pid":pid,"access_token":token})
+		if "error_code" in t.text:
+			raise ValueError
+		else:
+			return json.dumps(t.text)
+	def addComments(self,tid,pid,token,msg,fids):
+		t = requests.post("https://api.worktile.com/v1/tasks/"+tid+"/comment",params={"pid":pid,"access_token":token},data={"message":msg,"fids":fids})
+		#warning the rids is a list
+		#curl -d 'message=评论的内容&fids=['adihzxx', 'adiiihhhxx']' 'https://api.worktile.com/v1/tasks/adsa7sa6/comment?pid=xxx&access_token=xxx'
+		if "error_code" in t.text:
+			raise ValueError
+		else:
+			return json.dumps(t.text)
+	def deleteComment(self,tid,cid,pid,token):
+		t = requests.delete("https://api.worktile.com/v1/tasks/"+tid+"/comments/"+cid,params={"pid":pid,"access_token":token})
+		if "error_code" in t.text:
+			raise ValueError
+		else:
+			return json.dumps(t.text)
