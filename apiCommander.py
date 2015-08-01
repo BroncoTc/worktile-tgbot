@@ -10,8 +10,7 @@ __author__ = 'BroncoTc'
 bot = TeleBot(token="96054818:AAFiPFHafymEzsJx67ftJ0XFKe5pwlRKF3E")
 appKey = "0ae48b66b7564a9fb2011138ed02fa21"
 db = pickledb.load("./worktilebot.db", True)
-tempDb = pickledb.load("./tempdata.db", False)
-
+sessionDB=pickledb.load("./sessionstorage.db",True)
 
 def oauthProcessor(user_id, forceReOauth=False):
 	userWorktileToken = db.get(str(user_id) + "_worktileAccessToken")
@@ -39,7 +38,7 @@ def commandRouter(msg, user_id, chat_id, worktileToken):
 				markup.add(projectInfo["name"])
 			bot.send_message(chat_id,"Choose the project you want to view or edit from the list",reply_markup=markup)
 		except ValueError:
-			print "apierror"
+			bot.send_message(chat_id,"The worktile API returned an error, please try it later.")
 	elif msg == "/cancel":
 		markup=types.ReplyKeyboardHide()
 		bot.send_message(chat_id,"Current session canceled successfully!",reply_markup=markup)
