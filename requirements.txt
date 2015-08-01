@@ -1,0 +1,5 @@
+flask==0.10.1
+PyTelegramBotAPI==0.2.5
+requests==2.2.1
+pickleDB==0.4
+jinja2==2.7.3
