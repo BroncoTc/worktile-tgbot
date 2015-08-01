@@ -41,5 +41,6 @@ def commandRouter(msg, user_id, chat_id, worktileToken):
 		except ValueError:
 			print "apierror"
 	elif msg == "/cancel":
-		bot.send_message(chat_id,"Current session canceled successfully!",reply_markup=types.ReplyKeyboardHide)
+		markup=types.ReplyKeyboardMarkup()
+		bot.send_message(chat_id,"Current session canceled successfully!",reply_markup=markup)
 	return 0
